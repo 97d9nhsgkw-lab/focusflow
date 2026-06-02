@@ -7,6 +7,7 @@ import HabitTracker from './components/habits/HabitTracker'
 import TimeTracker from './components/tracker/TimeTracker'
 import Analytics from './components/analytics/Analytics'
 import { Settings } from './components/settings/Settings'
+import UserGuide from './components/userguide/UserGuide'
 import { useAppStore } from './store/appStore'
 
 function App() {
@@ -30,6 +31,8 @@ function App() {
         return <Analytics />
       case 'settings':
         return <Settings />
+      case 'userguide':
+        return <UserGuide />
       default:
         return <Dashboard />
     }

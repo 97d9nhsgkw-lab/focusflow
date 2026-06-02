@@ -8,6 +8,7 @@ import {
   Clock,
   BarChart3,
   Settings,
+  BookOpen,
   Menu,
   X,
 } from 'lucide-react'
@@ -23,6 +24,7 @@ const NAV_ITEMS: { icon: React.ElementType; label: string; view: ViewMode }[] = 
   { icon: Clock, label: 'Tracker', view: 'tracker' },
   { icon: BarChart3, label: 'Analytics', view: 'analytics' },
   { icon: Settings, label: 'Settings', view: 'settings' },
+  { icon: BookOpen, label: 'User Guide', view: 'userguide' },
 ]
 
 export const Sidebar = () => {
