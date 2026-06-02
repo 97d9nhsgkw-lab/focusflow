@@ -79,9 +79,16 @@ export async function sendAIMessage(
 
     return { content: '', error: 'Unknown provider' }
   } catch (e) {
+    const msg = e instanceof Error ? e.message : 'Unknown error'
+    if (msg.includes('Failed to fetch') || msg.includes('NetworkError') || msg.includes('CORS')) {
+      return {
+        content: '',
+        error: 'CORS error — your browser blocked the request. Anthropic may not allow direct browser calls. Try OpenAI, or check your API key.',
+      }
+    }
     return {
       content: '',
-      error: e instanceof Error ? e.message : 'Network error. Check your connection.',
+      error: `Network error: ${msg}`,
     }
   }
 }

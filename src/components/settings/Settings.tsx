@@ -36,6 +36,7 @@ export function Settings() {
 
   const [showApiKey, setShowApiKey] = useState(false)
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('idle')
+  const [connectionError, setConnectionError] = useState('')
   const [showClearConfirm, setShowClearConfirm] = useState(false)
   const [darkMode, setDarkMode] = useState(() =>
     document.documentElement.classList.contains('dark')
@@ -50,6 +51,7 @@ export function Settings() {
     if (!aiSettings.apiKey || !aiSettings.provider) return
 
     setConnectionStatus('testing')
+    setConnectionError('')
     try {
       const baseUrl =
         aiSettings.provider === 'openai'
@@ -77,11 +79,16 @@ export function Settings() {
       const res = await fetch(baseUrl, { method: 'POST', headers, body })
       if (res.ok) {
         setConnectionStatus('connected')
+        setConnectionError('')
       } else {
+        const errData = await res.json().catch(() => null)
+        const errMsg = errData?.error?.message || `HTTP ${res.status}: ${res.statusText}`
         setConnectionStatus('error')
+        setConnectionError(errMsg)
       }
-    } catch {
+    } catch (e) {
       setConnectionStatus('error')
+      setConnectionError(e instanceof Error ? e.message : 'Network error — check your connection')
     }
   }
 
@@ -284,6 +291,9 @@ export function Settings() {
             </button>
             <ConnectionBadge status={connectionStatus} />
           </div>
+          {connectionError && (
+            <p className="text-sm text-red-500 dark:text-red-400 mt-2">{connectionError}</p>
+          )}
         </div>
       </Section>
 
