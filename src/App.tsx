@@ -8,6 +8,7 @@ import TimeTracker from './components/tracker/TimeTracker'
 import Analytics from './components/analytics/Analytics'
 import { Settings } from './components/settings/Settings'
 import UserGuide from './components/userguide/UserGuide'
+import AIHub from './components/ai/AIHub'
 import { useAppStore } from './store/appStore'
 
 function App() {
@@ -33,6 +34,8 @@ function App() {
         return <Settings />
       case 'userguide':
         return <UserGuide />
+      case 'ai':
+        return <AIHub />
       default:
         return <Dashboard />
     }

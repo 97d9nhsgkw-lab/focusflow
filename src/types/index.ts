@@ -70,7 +70,7 @@ export interface AISettings {
   model: string
 }
 
-export type ViewMode = 'dashboard' | 'pomodoro' | 'focus' | 'planner' | 'habits' | 'tracker' | 'analytics' | 'settings' | 'userguide'
+export type ViewMode = 'dashboard' | 'pomodoro' | 'focus' | 'planner' | 'habits' | 'tracker' | 'analytics' | 'settings' | 'userguide' | 'ai'
 
 export const CATEGORIES = [
   { name: 'Work', color: '#0ea5e9' },

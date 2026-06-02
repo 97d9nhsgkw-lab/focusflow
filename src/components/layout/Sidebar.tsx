@@ -9,6 +9,7 @@ import {
   BarChart3,
   Settings,
   BookOpen,
+  Brain,
   Menu,
   X,
 } from 'lucide-react'
@@ -23,6 +24,7 @@ const NAV_ITEMS: { icon: React.ElementType; label: string; view: ViewMode }[] = 
   { icon: CheckSquare, label: 'Habits', view: 'habits' },
   { icon: Clock, label: 'Tracker', view: 'tracker' },
   { icon: BarChart3, label: 'Analytics', view: 'analytics' },
+  { icon: Brain, label: 'AI Assistant', view: 'ai' },
   { icon: Settings, label: 'Settings', view: 'settings' },
   { icon: BookOpen, label: 'User Guide', view: 'userguide' },
 ]
