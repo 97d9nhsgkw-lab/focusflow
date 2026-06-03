@@ -262,6 +262,21 @@ export function Settings() {
                 </option>
               ))}
             </select>
+            {aiSettings.provider && aiSettings.model && !filteredModels.some((m) => m.value === aiSettings.model) && (
+              <p className="text-xs text-amber-500 dark:text-amber-400 mt-1">
+                Model outdated.{' '}
+                <button
+                  type="button"
+                  onClick={() => {
+                    const firstModel = filteredModels[0]
+                    if (firstModel) updateAI({ model: firstModel.value })
+                  }}
+                  className="underline hover:text-amber-600"
+                >
+                  Click to fix
+                </button>
+              </p>
+            )}
           </div>
 
           <div className="flex items-center gap-3">
