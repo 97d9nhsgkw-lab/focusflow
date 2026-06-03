@@ -25,6 +25,7 @@ const AI_MODELS = [
   { provider: 'anthropic' as const, value: 'claude-sonnet-4-20250514', label: 'Claude Sonnet 4' },
   { provider: 'anthropic' as const, value: 'claude-3-5-haiku-20241022', label: 'Claude 3.5 Haiku' },
   { provider: 'anthropic' as const, value: 'claude-3-haiku-20240307', label: 'Claude 3 Haiku' },
+  { provider: 'anthropic' as const, value: 'claude-3-5-sonnet-20241022', label: 'Claude 3.5 Sonnet' },
 ]
 
 type ConnectionStatus = 'idle' | 'testing' | 'connected' | 'error'
