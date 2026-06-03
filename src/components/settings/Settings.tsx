@@ -22,8 +22,8 @@ import { useHabitStore } from '../../store/habitStore'
 const AI_MODELS = [
   { provider: 'openai' as const, value: 'gpt-4o', label: 'GPT-4o' },
   { provider: 'openai' as const, value: 'gpt-4o-mini', label: 'GPT-4o Mini' },
-  { provider: 'anthropic' as const, value: 'claude-3.5-sonnet', label: 'Claude 3.5 Sonnet' },
-  { provider: 'anthropic' as const, value: 'claude-3-haiku', label: 'Claude 3 Haiku' },
+  { provider: 'anthropic' as const, value: 'claude-3-5-sonnet-20241022', label: 'Claude 3.5 Sonnet' },
+  { provider: 'anthropic' as const, value: 'claude-3-haiku-20240307', label: 'Claude 3 Haiku' },
 ]
 
 type ConnectionStatus = 'idle' | 'testing' | 'connected' | 'error'
