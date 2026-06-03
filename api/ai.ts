@@ -66,7 +66,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const data = await response.json()
 
       if (!response.ok) {
-        return res.status(response.status).json({ error: data.error?.message || 'Anthropic API error' })
+        let errorMsg = data.error?.message || 'Anthropic API error'
+        
+        // Provide helpful hints for common errors
+        if (data.error?.type === 'authentication_error') {
+          errorMsg = 'Invalid API key. Check your key at console.anthropic.com'
+        } else if (data.error?.type === 'permission_error') {
+          errorMsg = 'Model not available. Try a different model or check your account access.'
+        } else if (data.error?.type === 'billing_error') {
+          errorMsg = 'Billing issue. Add credits at console.anthropic.com/settings/billing'
+        }
+        
+        return res.status(response.status).json({ error: errorMsg })
       }
 
       return res.status(200).json({ content: data.content?.[0]?.text || '' })

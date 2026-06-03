@@ -24,6 +24,7 @@ const AI_MODELS = [
   { provider: 'openai' as const, value: 'gpt-4o-mini', label: 'GPT-4o Mini' },
   { provider: 'anthropic' as const, value: 'claude-sonnet-4-20250514', label: 'Claude Sonnet 4' },
   { provider: 'anthropic' as const, value: 'claude-3-5-haiku-20241022', label: 'Claude 3.5 Haiku' },
+  { provider: 'anthropic' as const, value: 'claude-3-haiku-20240307', label: 'Claude 3 Haiku' },
 ]
 
 type ConnectionStatus = 'idle' | 'testing' | 'connected' | 'error'
@@ -295,7 +296,20 @@ export function Settings() {
             <ConnectionBadge status={connectionStatus} />
           </div>
           {connectionError && (
-            <p className="text-sm text-red-500 dark:text-red-400 mt-2">{connectionError}</p>
+            <div className="mt-2 space-y-1">
+              <p className="text-sm text-red-500 dark:text-red-400">{connectionError}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Check your key and billing at{' '}
+                <a
+                  href={aiSettings.provider === 'anthropic' ? 'https://console.anthropic.com/settings/billing' : 'https://platform.openai.com/settings/organization/billing'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-gray-700 dark:hover:text-gray-300"
+                >
+                  {aiSettings.provider === 'anthropic' ? 'console.anthropic.com' : 'platform.openai.com'}
+                </a>
+              </p>
+            </div>
           )}
         </div>
       </Section>
