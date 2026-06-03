@@ -56,7 +56,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: model || 'claude-3-haiku-20240307',
+          model: model || 'claude-3-5-haiku-20241022',
           max_tokens: maxTokens,
           system: systemMessage,
           messages: userMessages,
