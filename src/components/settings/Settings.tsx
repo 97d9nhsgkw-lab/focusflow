@@ -53,38 +53,26 @@ export function Settings() {
     setConnectionStatus('testing')
     setConnectionError('')
     try {
-      const baseUrl =
-        aiSettings.provider === 'openai'
-          ? 'https://api.openai.com/v1/chat/completions'
-          : 'https://api.anthropic.com/v1/messages'
+      const res = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          provider: aiSettings.provider,
+          apiKey: aiSettings.apiKey,
+          model: aiSettings.model,
+          messages: [{ role: 'user', content: 'Say "Connection successful" in exactly two words.' }],
+          maxTokens: 20,
+        }),
+      })
 
-      const headers: Record<string, string> =
-        aiSettings.provider === 'openai'
-          ? { Authorization: `Bearer ${aiSettings.apiKey}`, 'Content-Type': 'application/json' }
-          : { 'x-api-key': aiSettings.apiKey, 'Content-Type': 'application/json', 'anthropic-version': '2023-06-01' }
+      const data = await res.json()
 
-      const body =
-        aiSettings.provider === 'openai'
-          ? JSON.stringify({
-              model: aiSettings.model,
-              messages: [{ role: 'user', content: 'Say "Connection successful" in exactly two words.' }],
-              max_tokens: 20,
-            })
-          : JSON.stringify({
-              model: aiSettings.model,
-              max_tokens: 20,
-              messages: [{ role: 'user', content: 'Say "Connection successful" in exactly two words.' }],
-            })
-
-      const res = await fetch(baseUrl, { method: 'POST', headers, body })
       if (res.ok) {
         setConnectionStatus('connected')
         setConnectionError('')
       } else {
-        const errData = await res.json().catch(() => null)
-        const errMsg = errData?.error?.message || `HTTP ${res.status}: ${res.statusText}`
         setConnectionStatus('error')
-        setConnectionError(errMsg)
+        setConnectionError(data.error || `HTTP ${res.status}`)
       }
     } catch (e) {
       setConnectionStatus('error')

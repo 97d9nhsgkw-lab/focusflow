@@ -21,74 +21,30 @@ export async function sendAIMessage(
   }
 
   try {
-    if (settings.provider === 'openai') {
-      const res = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${settings.apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: settings.model || 'gpt-4o-mini',
-          messages,
-          max_tokens: maxTokens,
-          temperature: 0.7,
-        }),
-      })
+    const res = await fetch('/api/ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        provider: settings.provider,
+        apiKey: settings.apiKey,
+        model: settings.model,
+        messages,
+        maxTokens,
+      }),
+    })
 
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}))
-        return {
-          content: '',
-          error: err.error?.message || `API error: ${res.status}`,
-        }
-      }
+    const data = await res.json()
 
-      const data = await res.json()
-      return { content: data.choices[0]?.message?.content || '' }
-    } else if (settings.provider === 'anthropic') {
-      const systemMessage = messages.find((m) => m.role === 'system')?.content || ''
-      const userMessages = messages.filter((m) => m.role !== 'system')
-
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'x-api-key': settings.apiKey,
-          'Content-Type': 'application/json',
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: settings.model || 'claude-3-haiku',
-          max_tokens: maxTokens,
-          system: systemMessage,
-          messages: userMessages,
-        }),
-      })
-
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}))
-        return {
-          content: '',
-          error: err.error?.message || `API error: ${res.status}`,
-        }
-      }
-
-      const data = await res.json()
-      return { content: data.content?.[0]?.text || '' }
+    if (!res.ok) {
+      return { content: '', error: data.error || `API error: ${res.status}` }
     }
 
-    return { content: '', error: 'Unknown provider' }
+    return { content: data.content || '' }
   } catch (e) {
     const msg = e instanceof Error ? e.message : 'Unknown error'
-    if (msg.includes('Failed to fetch') || msg.includes('NetworkError') || msg.includes('CORS')) {
-      return {
-        content: '',
-        error: 'CORS error — your browser blocked the request. Anthropic may not allow direct browser calls. Try OpenAI, or check your API key.',
-      }
-    }
     return {
       content: '',
-      error: `Network error: ${msg}`,
+      error: `Network error: ${msg}. Make sure you're connected to the internet.`,
     }
   }
 }
