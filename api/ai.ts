@@ -48,6 +48,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const systemMessage = messages.find((m: { role: string }) => m.role === 'system')?.content || ''
       const userMessages = messages.filter((m: { role: string }) => m.role !== 'system')
 
+      // Build request body - don't include system if empty
+      const body: Record<string, unknown> = {
+        model: model || 'claude-3-haiku-20240307',
+        max_tokens: maxTokens,
+        messages: userMessages,
+      }
+      if (systemMessage) {
+        body.system = systemMessage
+      }
+
       const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
@@ -55,18 +65,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           'Content-Type': 'application/json',
           'anthropic-version': '2023-06-01',
         },
-        body: JSON.stringify({
-          model: model || 'claude-3-5-haiku-20241022',
-          max_tokens: maxTokens,
-          system: systemMessage,
-          messages: userMessages,
-        }),
+        body: JSON.stringify(body),
       })
 
       const data = await response.json()
 
       if (!response.ok) {
-        // Log full error for debugging
         console.error('Anthropic API error:', JSON.stringify(data))
         
         let errorMsg = data.error?.message || data.error?.type || `HTTP ${response.status}`

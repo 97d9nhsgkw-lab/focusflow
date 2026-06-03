@@ -36,6 +36,7 @@ export async function sendAIMessage(
     const data = await res.json()
 
     if (!res.ok) {
+      console.error('AI proxy error:', data)
       return { content: '', error: data.error || `API error: ${res.status}` }
     }
 
