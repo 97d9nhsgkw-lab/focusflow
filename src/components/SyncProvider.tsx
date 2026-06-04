@@ -7,12 +7,13 @@ import { useAIStore } from '../store/aiStore'
 
 export function SyncProvider({ children }: { children: React.ReactNode }) {
   const { user, initSync } = useSyncStore()
-  const cloudLoaded = useRef(false)
+  const initialLoadDone = useRef(false)
 
   useEffect(() => {
     initSync()
   }, [])
 
+  // Listen for incoming cloud data
   useEffect(() => {
     if (!user) return
 
@@ -20,6 +21,9 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
 
     const handleSync = (e: Event) => {
       const { path, data } = (e as CustomEvent).detail
+      console.log('[Sync] Received cloud data for:', path, data)
+      
+      // Always apply cloud data - this ensures phone gets computer's data
       switch (path) {
         case 'pomodoro':
           usePomodoroStore.setState(data)
@@ -34,15 +38,15 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
           useAIStore.setState(data)
           break
       }
-      cloudLoaded.current = true
+      initialLoadDone.current = true
     }
 
     window.addEventListener('sync-data', handleSync as EventListener)
 
-    // Allow cloud to load before enabling sync to cloud
+    // Mark initial load done after 1 second (so we don't immediately overwrite cloud with empty local)
     const timer = setTimeout(() => {
-      cloudLoaded.current = true
-    }, 2000)
+      initialLoadDone.current = true
+    }, 1000)
 
     return () => {
       unsub()
@@ -51,31 +55,28 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
     }
   }, [user])
 
+  // Sync local changes to cloud
   useEffect(() => {
     if (!user) return
 
     const unsubPomodoro = usePomodoroStore.subscribe((state) => {
-      if (cloudLoaded.current) {
-        syncToCloud(user.uid, 'pomodoro', { settings: state.settings })
-      }
+      console.log('[Sync] Saving pomodoro to cloud')
+      syncToCloud(user.uid, 'pomodoro', { settings: state.settings }).catch(console.error)
     })
 
     const unsubTracker = useTrackerStore.subscribe((state) => {
-      if (cloudLoaded.current) {
-        syncToCloud(user.uid, 'tracker', { entries: state.entries })
-      }
+      console.log('[Sync] Saving tracker to cloud')
+      syncToCloud(user.uid, 'tracker', { entries: state.entries }).catch(console.error)
     })
 
     const unsubHabits = useHabitStore.subscribe((state) => {
-      if (cloudLoaded.current) {
-        syncToCloud(user.uid, 'habits', { habits: state.habits, logs: state.logs })
-      }
+      console.log('[Sync] Saving habits to cloud')
+      syncToCloud(user.uid, 'habits', { habits: state.habits, logs: state.logs }).catch(console.error)
     })
 
     const unsubAI = useAIStore.subscribe((state) => {
-      if (cloudLoaded.current) {
-        syncToCloud(user.uid, 'ai', { settings: state.settings })
-      }
+      console.log('[Sync] Saving AI settings to cloud')
+      syncToCloud(user.uid, 'ai', { settings: state.settings }).catch(console.error)
     })
 
     return () => {
