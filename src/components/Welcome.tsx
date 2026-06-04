@@ -64,7 +64,7 @@ const FEATURES = [
 
 export default function Welcome({ isSignedIn, userName }: WelcomeProps) {
   const { setView } = useAppStore()
-  const firstName = userName?.split(' ')[0] || null
+  const firstName = userName?.split(' ')[0] || userName || null
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col">

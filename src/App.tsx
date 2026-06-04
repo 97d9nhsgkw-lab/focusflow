@@ -20,7 +20,7 @@ function App() {
   const renderView = () => {
     switch (currentView) {
       case 'dashboard':
-        return <Welcome isSignedIn={!!user} userName={user?.displayName ?? null} />
+        return <Welcome isSignedIn={!!user} userName={user?.displayName || user?.email?.split('@')[0] || null} />
       case 'pomodoro':
         return <PomodoroTimer />
       case 'focus':
@@ -40,7 +40,7 @@ function App() {
       case 'ai':
         return <AIHub />
       default:
-        return <Welcome isSignedIn={!!user} userName={user?.displayName ?? null} />
+        return <Welcome isSignedIn={!!user} userName={user?.displayName || user?.email?.split('@')[0] || null} />
     }
   }
 
