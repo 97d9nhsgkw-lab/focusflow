@@ -1,18 +1,16 @@
-import { useState } from 'react'
 import {
   Timer,
   Focus,
   CalendarDays,
   CheckSquare,
   Clock,
-  BarChart3,
   Brain,
   Sparkles,
   ArrowRight,
   Share2,
   Smartphone,
 } from 'lucide-react'
-import { useAppStore } from '../../store/appStore'
+import { useAppStore } from '../store/appStore'
 
 const FEATURES = [
   {
@@ -61,7 +59,6 @@ const FEATURES = [
 
 export default function Welcome() {
   const { setView } = useAppStore()
-  const [currentStep, setCurrentStep] = useState(0)
 
   const handleGetStarted = () => {
     localStorage.setItem('focusflow-welcomed', 'true')

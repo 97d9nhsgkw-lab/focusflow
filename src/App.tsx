@@ -16,7 +16,7 @@ import { SyncProvider } from './components/SyncProvider'
 
 function App() {
   const { currentView } = useAppStore()
-  const [showWelcome, setShowWelcome] = useState(() => {
+  const [showWelcome] = useState(() => {
     return !localStorage.getItem('focusflow-welcomed')
   })
 
