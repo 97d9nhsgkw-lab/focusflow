@@ -64,6 +64,7 @@ const FEATURES = [
 
 export default function Welcome({ isSignedIn, userName }: WelcomeProps) {
   const { setView } = useAppStore()
+  const firstName = userName?.split(' ')[0] || null
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col">
@@ -78,7 +79,7 @@ export default function Welcome({ isSignedIn, userName }: WelcomeProps) {
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
               Welcome back,{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-violet-600">
-                {userName || 'there'}
+                {firstName || 'there'}
               </span>
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md mb-8">
