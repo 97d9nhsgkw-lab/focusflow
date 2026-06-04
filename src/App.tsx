@@ -13,41 +13,44 @@ import { useAppStore } from './store/appStore'
 import { useSyncStore } from './store/syncStore'
 import { SyncProvider } from './components/SyncProvider'
 
-function App() {
+function AppContent() {
   const { currentView } = useAppStore()
   const { user } = useSyncStore()
 
-  const renderView = () => {
-    switch (currentView) {
-      case 'dashboard':
-        return <Welcome isSignedIn={!!user} userName={user?.displayName || user?.email?.split('@')[0] || null} />
-      case 'pomodoro':
-        return <PomodoroTimer />
-      case 'focus':
-        return <FocusMode />
-      case 'planner':
-        return <DailyPlanner />
-      case 'habits':
-        return <HabitTracker />
-      case 'tracker':
-        return <TimeTracker />
-      case 'analytics':
-        return <Analytics />
-      case 'settings':
-        return <Settings />
-      case 'userguide':
-        return <UserGuide />
-      case 'ai':
-        return <AIHub />
-      default:
-        return <Welcome isSignedIn={!!user} userName={user?.displayName || user?.email?.split('@')[0] || null} />
-    }
-  }
+  const userName = user?.displayName || user?.email?.split('@')[0] || null
+  const isSignedIn = !!user
 
+  switch (currentView) {
+    case 'dashboard':
+      return <Welcome isSignedIn={isSignedIn} userName={userName} />
+    case 'pomodoro':
+      return <PomodoroTimer />
+    case 'focus':
+      return <FocusMode />
+    case 'planner':
+      return <DailyPlanner />
+    case 'habits':
+      return <HabitTracker />
+    case 'tracker':
+      return <TimeTracker />
+    case 'analytics':
+      return <Analytics />
+    case 'settings':
+      return <Settings />
+    case 'userguide':
+      return <UserGuide />
+    case 'ai':
+      return <AIHub />
+    default:
+      return <Welcome isSignedIn={isSignedIn} userName={userName} />
+  }
+}
+
+function App() {
   return (
     <SyncProvider>
       <Layout>
-        {renderView()}
+        <AppContent />
       </Layout>
     </SyncProvider>
   )
