@@ -37,12 +37,12 @@ const GUIDE_SECTIONS: GuideSection[] = [
       {
         title: 'Welcome to FocusFlow',
         description:
-          'FocusFlow is a personal productivity app that helps you manage your time, build habits, and stay focused. Sign in with Google to sync your data across all devices.',
+          'FocusFlow is a personal productivity app that helps you manage your time, build habits, and stay focused. Create an account with email/password or sign in with Google to sync your data across all devices.',
       },
       {
         title: 'Quick Start',
         description:
-          'Open the sidebar (click the menu icon on mobile) and navigate between features. Sign in with Google in Settings to sync across devices.',
+          'Open the sidebar (click the menu icon on mobile) and navigate between features. Create an account or sign in with Google in Settings to sync across devices.',
         tips: [
           'Start with the Dashboard to see your daily overview',
           'Use the Pomodoro Timer for structured work sessions',
@@ -274,18 +274,25 @@ const GUIDE_SECTIONS: GuideSection[] = [
       {
         title: 'Sync Across Devices',
         description:
-          'Sign in with Google in Settings to automatically sync your data across all your devices in real time.',
+          'Sign in with email/password or Google in Settings to automatically sync your data across all your devices in real time.',
         tips: [
-          'Click "Sign in with Google" in the Cloud Sync section of Settings',
-          'Sign in with the same Google account on any device to access your data',
+          'Click "Sign In / Sign Up" in the Cloud Sync section of Settings',
+          'Create an account with your email, password, and display name',
+          'Or use "Sign in with Google" for quick access',
+          'Sign in with the same account on any device to access your data',
           'Changes sync automatically — no manual refresh needed',
           'Your data is stored securely in Firebase Firestore',
         ],
       },
       {
+        title: 'Email Verification',
+        description:
+          'When you sign up with email/password, a verification email is sent automatically. Verify your email to keep your account secure, but you can start using the app right away.',
+      },
+      {
         title: 'How It Works',
         description:
-          'When signed in, all your pomodoro settings, time entries, habits, and AI config are backed up to the cloud. Sign in on another device and your data appears instantly.',
+          'When signed in, all your pomodoro settings, time entries, habits, AI config, and planner data are backed up to the cloud. Sign in on another device and your data appears instantly.',
       },
       {
         title: 'Signing Out',
