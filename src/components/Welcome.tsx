@@ -6,7 +6,6 @@ import {
   Clock,
   Brain,
   Sparkles,
-  ArrowRight,
   Share2,
   Smartphone,
   LogIn,

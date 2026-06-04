@@ -1,5 +1,4 @@
 import { Layout } from './components/layout/Layout'
-import Dashboard from './components/Dashboard'
 import PomodoroTimer from './components/pomodoro/PomodoroTimer'
 import { FocusMode } from './components/focus/FocusMode'
 import DailyPlanner from './components/planner/DailyPlanner'
@@ -21,7 +20,7 @@ function App() {
   const renderView = () => {
     switch (currentView) {
       case 'dashboard':
-        return <Welcome isSignedIn={!!user} userName={user?.displayName || user?.email} />
+        return <Welcome isSignedIn={!!user} userName={user?.displayName ?? null} />
       case 'pomodoro':
         return <PomodoroTimer />
       case 'focus':
@@ -41,7 +40,7 @@ function App() {
       case 'ai':
         return <AIHub />
       default:
-        return <Welcome isSignedIn={!!user} userName={user?.displayName || user?.email} />
+        return <Welcome isSignedIn={!!user} userName={user?.displayName ?? null} />
     }
   }
 
