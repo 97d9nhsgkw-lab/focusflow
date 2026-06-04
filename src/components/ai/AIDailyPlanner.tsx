@@ -6,7 +6,7 @@ import { useAIStore } from '../../store/aiStore'
 import { useHabitStore } from '../../store/habitStore'
 import { useTrackerStore } from '../../store/trackerStore'
 import { CATEGORIES } from '../../types'
-import { getTodayKey, formatTime } from '../../utils'
+import { getTodayKey, formatTime, generateId } from '../../utils'
 
 interface ScheduleItem {
   time: string
@@ -20,7 +20,7 @@ interface DailyPlanResponse {
   summary: string
 }
 
-const AI_DAILY_PLAN_KEY = 'ai-daily-plan'
+const PLANNER_STORAGE_KEY = 'daily-planner-plans'
 
 export default function AIDailyPlanner() {
   const [loading, setLoading] = useState(false)
@@ -98,13 +98,29 @@ export default function AIDailyPlanner() {
   }
 
   const addToPlanner = () => {
-    if (!schedule) return
-    const planData = {
+    if (!plan) return
+
+    const today = getTodayKey()
+    const existingPlans = JSON.parse(localStorage.getItem(PLANNER_STORAGE_KEY) || '{}')
+    const existingBlocks = existingPlans[today]?.blocks || []
+
+    const newBlocks = plan.schedule.map((item: ScheduleItem) => ({
+      id: generateId(),
+      title: item.task,
+      startHour: parseInt(item.time.split(':')[0]),
+      endHour: parseInt(item.time.split(':')[0]) + Math.ceil(item.duration / 60),
+      category: CATEGORIES.find(c => c.name === item.category) ? item.category : 'Personal',
+      completed: false,
+    }))
+
+    existingPlans[today] = {
       date: today,
-      schedule,
-      summary,
-      createdAt: new Date().toISOString(),
+      blocks: [...existingBlocks, ...newBlocks],
     }
+
+    localStorage.setItem(PLANNER_STORAGE_KEY, JSON.stringify(existingPlans))
+    setAddedToPlanner(true)
+  }
     localStorage.setItem(AI_DAILY_PLAN_KEY, JSON.stringify(planData))
     setSaved(true)
   }
