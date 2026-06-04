@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { format } from 'date-fns'
 import {
   Timer,
@@ -7,6 +7,8 @@ import {
   Plus,
   Flame,
   CheckCircle2,
+  Share2,
+  Check,
 } from 'lucide-react'
 import { usePomodoroStore } from '../store/pomodoroStore'
 import { useTrackerStore } from '../store/trackerStore'
@@ -19,6 +21,7 @@ export default function Dashboard() {
   const { entries, getTotalForDate } = useTrackerStore()
   const { habits, getStreak, getLogsForDate } = useHabitStore()
   const { setView } = useAppStore()
+  const [copied, setCopied] = useState(false)
 
   const today = getTodayKey()
   const todayEntries = useMemo(
@@ -47,6 +50,25 @@ export default function Dashboard() {
     if (hour < 18) return 'Good afternoon'
     return 'Good evening'
   }, [])
+
+  const handleShare = async () => {
+    const url = window.location.origin
+    try {
+      await navigator.clipboard.writeText(url)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea')
+      textArea.value = url
+      document.body.appendChild(textArea)
+      textArea.select()
+      document.execCommand('copy')
+      document.body.removeChild(textArea)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    }
+  }
 
   const statCards = [
     {
@@ -144,12 +166,40 @@ export default function Dashboard() {
           <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
             <Flame size={24} />
           </div>
-          <div>
+          <div className="flex-1">
             <p className="text-lg font-bold">{overallStreak} Day Streak</p>
             <p className="text-sm text-white/80">
               Keep it up! You're on fire.
             </p>
           </div>
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-2 px-3 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors text-sm font-medium"
+          >
+            {copied ? <Check size={16} /> : <Share2 size={16} />}
+            {copied ? 'Copied!' : 'Share'}
+          </button>
+        </div>
+      )}
+
+      {overallStreak === 0 && (
+        <div className="bg-gradient-to-r from-primary-500 to-blue-500 rounded-xl p-4 flex items-center gap-4 text-white">
+          <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+            <Share2 size={24} />
+          </div>
+          <div className="flex-1">
+            <p className="text-lg font-bold">Share FocusFlow</p>
+            <p className="text-sm text-white/80">
+              Help friends boost their productivity
+            </p>
+          </div>
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-2 px-3 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors text-sm font-medium"
+          >
+            {copied ? <Check size={16} /> : <Share2 size={16} />}
+            {copied ? 'Copied!' : 'Share'}
+          </button>
         </div>
       )}
 
