@@ -10,7 +10,10 @@ import {
   Share2,
   Smartphone,
 } from 'lucide-react'
-import { useAppStore } from '../store/appStore'
+
+interface WelcomeProps {
+  onGetStarted: () => void
+}
 
 const FEATURES = [
   {
@@ -57,14 +60,7 @@ const FEATURES = [
   },
 ]
 
-export default function Welcome() {
-  const { setView } = useAppStore()
-
-  const handleGetStarted = () => {
-    localStorage.setItem('focusflow-welcomed', 'true')
-    setView('dashboard')
-  }
-
+export default function Welcome({ onGetStarted }: WelcomeProps) {
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col">
       {/* Hero Section */}
@@ -85,7 +81,7 @@ export default function Welcome() {
         </p>
 
         <button
-          onClick={handleGetStarted}
+          onClick={onGetStarted}
           className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-500 to-violet-600 text-white rounded-xl font-medium shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all hover:scale-105"
         >
           Get Started
