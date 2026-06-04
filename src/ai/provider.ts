@@ -40,7 +40,10 @@ export async function sendAIMessage(
       return { content: '', error: data.error || `API error: ${res.status}` }
     }
 
-    return { content: data.content || '' }
+    let content = data.content || ''
+    // Strip markdown code fences if present
+    content = content.replace(/^```(?:json)?\s*\n?/i, '').replace(/\n?```\s*$/i, '').trim()
+    return { content }
   } catch (e) {
     const msg = e instanceof Error ? e.message : 'Unknown error'
     return {
