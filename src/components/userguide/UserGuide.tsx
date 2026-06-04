@@ -37,12 +37,12 @@ const GUIDE_SECTIONS: GuideSection[] = [
       {
         title: 'Welcome to FocusFlow',
         description:
-          'FocusFlow is a personal productivity app that helps you manage your time, build habits, and stay focused. All your data stays in your browser — no account needed.',
+          'FocusFlow is a personal productivity app that helps you manage your time, build habits, and stay focused. Sign in with Google to sync your data across all devices.',
       },
       {
         title: 'Quick Start',
         description:
-          'Open the sidebar (click the menu icon on mobile) and navigate between features. Your data is saved automatically in your browser.',
+          'Open the sidebar (click the menu icon on mobile) and navigate between features. Sign in with Google in Settings to sync across devices.',
         tips: [
           'Start with the Dashboard to see your daily overview',
           'Use the Pomodoro Timer for structured work sessions',
@@ -263,6 +263,34 @@ const GUIDE_SECTIONS: GuideSection[] = [
         title: 'Dark Mode',
         description:
           'Toggle between light and dark themes. The app also respects your system preference by default.',
+      },
+    ],
+  },
+  {
+    id: 'cloud-sync',
+    icon: Zap,
+    title: 'Cloud Sync',
+    content: [
+      {
+        title: 'Sync Across Devices',
+        description:
+          'Sign in with Google in Settings to automatically sync your data across all your devices in real time.',
+        tips: [
+          'Click "Sign in with Google" in the Cloud Sync section of Settings',
+          'Sign in with the same Google account on any device to access your data',
+          'Changes sync automatically — no manual refresh needed',
+          'Your data is stored securely in Firebase Firestore',
+        ],
+      },
+      {
+        title: 'How It Works',
+        description:
+          'When signed in, all your pomodoro settings, time entries, habits, and AI config are backed up to the cloud. Sign in on another device and your data appears instantly.',
+      },
+      {
+        title: 'Signing Out',
+        description:
+          'Click "Sign Out" in Settings to stop syncing. Your local data remains intact but will no longer sync across devices.',
       },
     ],
   },
