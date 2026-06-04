@@ -14,7 +14,6 @@ import {
   Timer,
   Palette,
   Cloud,
-  LogIn,
   LogOut,
   UserPlus,
 } from 'lucide-react'
