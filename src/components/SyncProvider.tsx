@@ -60,23 +60,31 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
     if (!user) return
 
     const unsubPomodoro = usePomodoroStore.subscribe((state) => {
-      console.log('[Sync] Saving pomodoro to cloud')
-      syncToCloud(user.uid, 'pomodoro', { settings: state.settings }).catch(console.error)
+      if (initialLoadDone.current) {
+        console.log('[Sync] Saving pomodoro to cloud')
+        syncToCloud(user.uid, 'pomodoro', { settings: state.settings }).catch(console.error)
+      }
     })
 
     const unsubTracker = useTrackerStore.subscribe((state) => {
-      console.log('[Sync] Saving tracker to cloud')
-      syncToCloud(user.uid, 'tracker', { entries: state.entries }).catch(console.error)
+      if (initialLoadDone.current) {
+        console.log('[Sync] Saving tracker to cloud')
+        syncToCloud(user.uid, 'tracker', { entries: state.entries }).catch(console.error)
+      }
     })
 
     const unsubHabits = useHabitStore.subscribe((state) => {
-      console.log('[Sync] Saving habits to cloud')
-      syncToCloud(user.uid, 'habits', { habits: state.habits, logs: state.logs }).catch(console.error)
+      if (initialLoadDone.current) {
+        console.log('[Sync] Saving habits to cloud')
+        syncToCloud(user.uid, 'habits', { habits: state.habits, logs: state.logs }).catch(console.error)
+      }
     })
 
     const unsubAI = useAIStore.subscribe((state) => {
-      console.log('[Sync] Saving AI settings to cloud')
-      syncToCloud(user.uid, 'ai', { settings: state.settings }).catch(console.error)
+      if (initialLoadDone.current) {
+        console.log('[Sync] Saving AI settings to cloud')
+        syncToCloud(user.uid, 'ai', { settings: state.settings }).catch(console.error)
+      }
     })
 
     return () => {
