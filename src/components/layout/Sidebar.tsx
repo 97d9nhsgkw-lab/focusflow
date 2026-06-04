@@ -36,7 +36,7 @@ export const Sidebar = () => {
     <>
       <button
         onClick={toggleSidebar}
-        className="fixed top-4 left-4 z-50 p-2 rounded-lg bg-white dark:bg-gray-800 shadow-md lg:hidden"
+        className="fixed top-6 left-4 z-50 p-2 rounded-lg bg-white dark:bg-gray-800 shadow-md lg:hidden"
       >
         {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
       </button>

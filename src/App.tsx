@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Layout } from './components/layout/Layout'
 import Dashboard from './components/Dashboard'
 import PomodoroTimer from './components/pomodoro/PomodoroTimer'
@@ -9,13 +10,27 @@ import Analytics from './components/analytics/Analytics'
 import { Settings } from './components/settings/Settings'
 import UserGuide from './components/userguide/UserGuide'
 import AIHub from './components/ai/AIHub'
+import Welcome from './components/Welcome'
 import { useAppStore } from './store/appStore'
 import { SyncProvider } from './components/SyncProvider'
 
 function App() {
   const { currentView } = useAppStore()
+  const [showWelcome, setShowWelcome] = useState(() => {
+    return !localStorage.getItem('focusflow-welcomed')
+  })
+
+  useEffect(() => {
+    if (showWelcome) {
+      localStorage.setItem('focusflow-welcomed', 'true')
+    }
+  }, [showWelcome])
 
   const renderView = () => {
+    if (showWelcome) {
+      return <Welcome />
+    }
+
     switch (currentView) {
       case 'dashboard':
         return <Dashboard />
