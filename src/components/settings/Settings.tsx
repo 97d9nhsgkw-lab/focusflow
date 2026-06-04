@@ -199,7 +199,7 @@ export function Settings() {
                 const provider = (e.target.value || null) as 'openai' | 'anthropic' | null
                 updateAI({
                   provider,
-                  model: provider === 'anthropic' ? 'claude-3-haiku-20240307' : provider === 'openai' ? 'gpt-4o-mini' : '',
+                   model: provider === 'anthropic' ? 'claude-haiku-4-5-20251001' : provider === 'openai' ? 'gpt-4o-mini' : '',
                 })
               }}
               className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
@@ -241,12 +241,12 @@ export function Settings() {
               value={aiSettings.model}
               onChange={(e) => updateAI({ model: e.target.value })}
               disabled={!aiSettings.provider}
-              placeholder={aiSettings.provider === 'anthropic' ? 'e.g. claude-3-haiku-20240307' : 'e.g. gpt-4o-mini'}
+              placeholder={aiSettings.provider === 'anthropic' ? 'e.g. claude-haiku-4-5-20251001' : 'e.g. gpt-4o-mini'}
               className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               {aiSettings.provider === 'anthropic'
-                ? 'Try: claude-3-haiku-20240307 or claude-3-5-haiku-20241022'
+                ? 'Try: claude-haiku-4-5-20251001 or claude-sonnet-4-6'
                 : 'Try: gpt-4o-mini or gpt-4o'}
             </p>
           </div>

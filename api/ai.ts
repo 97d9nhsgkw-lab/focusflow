@@ -50,7 +50,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       // Build request body - don't include system if empty
       const body: Record<string, unknown> = {
-        model: model || 'claude-3-haiku-20240307',
+          model: model || 'claude-haiku-4-5-20251001',
         max_tokens: maxTokens,
         messages: userMessages,
       }
@@ -78,7 +78,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (data.error?.type === 'authentication_error') {
           errorMsg = 'Invalid API key. Create a new key at console.anthropic.com/settings/keys'
         } else if (data.error?.type === 'permission_error' || data.error?.type === 'not_found_error') {
-          errorMsg = `Model not available: ${model}. Try "claude-3-haiku-20240307" instead.`
+          errorMsg = `Model not available: ${model}. Try "claude-haiku-4-5-20251001" instead.`
         }
         
         return res.status(response.status).json({ error: errorMsg })
