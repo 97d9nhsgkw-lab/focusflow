@@ -1,6 +1,14 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { onAuthChange, listenToUserData, saveUserData, signInWithGoogle, logOut } from '../firebase'
+import {
+  onAuthChange,
+  listenToUserData,
+  saveUserData,
+  signInWithGoogle,
+  signUpWithEmail,
+  signInWithEmail as firebaseSignInWithEmail,
+  logOut,
+} from '../firebase'
 
 interface User {
   uid: string
@@ -14,6 +22,8 @@ interface SyncState {
   loading: boolean
   setUser: (user: User | null) => void
   signIn: () => Promise<void>
+  signInWithEmail: (email: string, password: string) => Promise<void>
+  signUp: (email: string, password: string, displayName: string) => Promise<void>
   signOut: () => Promise<void>
   initSync: () => void
 }
@@ -32,6 +42,24 @@ export const useSyncStore = create<SyncState>()(
           await signInWithGoogle()
         } catch (e) {
           console.error('Sign in failed:', e)
+          throw e
+        }
+      },
+
+      signInWithEmail: async (email: string, password: string) => {
+        try {
+          await firebaseSignInWithEmail(email, password)
+        } catch (e) {
+          console.error('Sign in with email failed:', e)
+          throw e
+        }
+      },
+
+      signUp: async (email: string, password: string, displayName: string) => {
+        try {
+          await signUpWithEmail(email, password, displayName)
+        } catch (e) {
+          console.error('Sign up failed:', e)
           throw e
         }
       },
