@@ -10,6 +10,7 @@ import { Settings } from './components/settings/Settings'
 import UserGuide from './components/userguide/UserGuide'
 import AIHub from './components/ai/AIHub'
 import { useAppStore } from './store/appStore'
+import { SyncProvider } from './components/SyncProvider'
 
 function App() {
   const { currentView } = useAppStore()
@@ -42,9 +43,11 @@ function App() {
   }
 
   return (
-    <Layout>
-      {renderView()}
-    </Layout>
+    <SyncProvider>
+      <Layout>
+        {renderView()}
+      </Layout>
+    </SyncProvider>
   )
 }
 

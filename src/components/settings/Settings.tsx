@@ -13,11 +13,15 @@ import {
   Loader2,
   Timer,
   Palette,
+  Cloud,
+  LogIn,
+  LogOut,
 } from 'lucide-react'
 import { usePomodoroStore } from '../../store/pomodoroStore'
 import { useAIStore } from '../../store/aiStore'
 import { useTrackerStore } from '../../store/trackerStore'
 import { useHabitStore } from '../../store/habitStore'
+import { useSyncStore } from '../../store/syncStore'
 
 type ConnectionStatus = 'idle' | 'testing' | 'connected' | 'error'
 
@@ -26,6 +30,7 @@ export function Settings() {
   const { settings: aiSettings, updateSettings: updateAI } = useAIStore()
   const { entries } = useTrackerStore()
   const { habits, logs } = useHabitStore()
+  const { user, signIn, signOut } = useSyncStore()
 
   const [showApiKey, setShowApiKey] = useState(false)
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>('idle')
@@ -133,6 +138,44 @@ export function Settings() {
         <SettingsIcon size={24} className="text-gray-700 dark:text-gray-300" />
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Settings</h1>
       </div>
+
+      <Section icon={<Cloud size={18} />} title="Cloud Sync">
+        <div className="space-y-3">
+          {user ? (
+            <>
+              <div className="flex items-center gap-3">
+                <CheckCircle2 size={16} className="text-emerald-500" />
+                <span className="text-sm text-gray-700 dark:text-gray-300">
+                  Signed in as <strong>{user.displayName || user.email}</strong>
+                </span>
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Your data syncs automatically across all devices.
+              </p>
+              <button
+                onClick={() => signOut()}
+                className="inline-flex items-center gap-2 rounded-lg bg-gray-100 dark:bg-gray-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              >
+                <LogOut size={16} />
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Sign in to sync your data across devices.
+              </p>
+              <button
+                onClick={() => signIn()}
+                className="inline-flex items-center gap-2 rounded-lg bg-primary-500 px-4 py-2 text-sm font-medium text-white hover:bg-primary-600 transition-colors"
+              >
+                <LogIn size={16} />
+                Sign in with Google
+              </button>
+            </>
+          )}
+        </div>
+      </Section>
 
       <Section icon={<Timer size={18} />} title="Pomodoro">
         <SliderField
