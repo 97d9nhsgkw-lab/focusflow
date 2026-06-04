@@ -14,7 +14,7 @@ export const Layout = ({ children }: LayoutProps) => {
       <Sidebar />
       <main
         className={`transition-all duration-200 ${
-          sidebarOpen ? 'lg:ml-64' : 'lg:ml-64'
+          sidebarOpen ? 'lg:ml-64' : 'lg:ml-0'
         } min-h-screen`}
       >
         <div className="p-4 lg:p-8 max-w-6xl mx-auto">{children}</div>

@@ -3,6 +3,7 @@ import { CalendarDays, Loader2, Plus, Check, Brain } from 'lucide-react'
 import { sendAIMessage } from '../../ai/provider'
 import { DAILY_PLANNER_PROMPT } from '../../ai/prompts'
 import { useAIStore } from '../../store/aiStore'
+import { useAppStore } from '../../store/appStore'
 import { useHabitStore } from '../../store/habitStore'
 import { useTrackerStore } from '../../store/trackerStore'
 import { CATEGORIES } from '../../types'
@@ -30,6 +31,7 @@ export default function AIDailyPlanner() {
   const [saved, setSaved] = useState(false)
 
   const { hasApiKey } = useAIStore()
+  const { setView } = useAppStore()
   const { habits, logs } = useHabitStore()
   const { entries } = useTrackerStore()
 
@@ -98,13 +100,13 @@ export default function AIDailyPlanner() {
   }
 
   const addToPlanner = () => {
-    if (!plan) return
+    if (!schedule) return
 
     const today = getTodayKey()
     const existingPlans = JSON.parse(localStorage.getItem(PLANNER_STORAGE_KEY) || '{}')
     const existingBlocks = existingPlans[today]?.blocks || []
 
-    const newBlocks = plan.schedule.map((item: ScheduleItem) => ({
+    const newBlocks = schedule.map((item: ScheduleItem) => ({
       id: generateId(),
       title: item.task,
       startHour: parseInt(item.time.split(':')[0]),
@@ -119,9 +121,6 @@ export default function AIDailyPlanner() {
     }
 
     localStorage.setItem(PLANNER_STORAGE_KEY, JSON.stringify(existingPlans))
-    setAddedToPlanner(true)
-  }
-    localStorage.setItem(AI_DAILY_PLAN_KEY, JSON.stringify(planData))
     setSaved(true)
   }
 
@@ -139,12 +138,12 @@ export default function AIDailyPlanner() {
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
           Configure your AI settings in the Settings page to use the AI Daily Planner.
         </p>
-        <a
-          href="#settings"
+        <button
+          onClick={() => setView('settings')}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-500 hover:bg-primary-600 text-white text-sm font-medium transition-colors"
         >
           Go to Settings
-        </a>
+        </button>
       </div>
     )
   }
