@@ -45,10 +45,6 @@ export function Settings() {
   )
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const filteredModels = aiSettings.provider
-    ? AI_MODELS.filter((m) => m.provider === aiSettings.provider)
-    : AI_MODELS
-
   const handleTestConnection = async () => {
     if (!aiSettings.apiKey || !aiSettings.provider) return
 
