@@ -251,34 +251,19 @@ export function Settings() {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Model
             </label>
-            <select
+            <input
+              type="text"
               value={aiSettings.model}
               onChange={(e) => updateAI({ model: e.target.value })}
               disabled={!aiSettings.provider}
-              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-primary-500"
-            >
-              {!aiSettings.provider && <option value="">Select provider first...</option>}
-              {filteredModels.map((m) => (
-                <option key={m.value} value={m.value}>
-                  {m.label}
-                </option>
-              ))}
-            </select>
-            {aiSettings.provider && aiSettings.model && !filteredModels.some((m) => m.value === aiSettings.model) && (
-              <p className="text-xs text-amber-500 dark:text-amber-400 mt-1">
-                Model outdated.{' '}
-                <button
-                  type="button"
-                  onClick={() => {
-                    const firstModel = filteredModels[0]
-                    if (firstModel) updateAI({ model: firstModel.value })
-                  }}
-                  className="underline hover:text-amber-600"
-                >
-                  Click to fix
-                </button>
-              </p>
-            )}
+              placeholder={aiSettings.provider === 'anthropic' ? 'e.g. claude-3-haiku-20240307' : 'e.g. gpt-4o-mini'}
+              className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            />
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              {aiSettings.provider === 'anthropic'
+                ? 'Try: claude-3-haiku-20240307 or claude-3-5-haiku-20241022'
+                : 'Try: gpt-4o-mini or gpt-4o'}
+            </p>
           </div>
 
           <div className="flex items-center gap-3">
