@@ -36,7 +36,8 @@ export const Sidebar = () => {
     <>
       <button
         onClick={toggleSidebar}
-        className="fixed top-6 left-4 z-50 p-2 rounded-lg bg-white dark:bg-gray-800 shadow-md lg:hidden"
+        className="fixed left-4 z-50 p-2 rounded-lg bg-white dark:bg-gray-800 shadow-md lg:hidden"
+        style={{ top: 'max(1.5rem, env(safe-area-inset-top, 0px))' }}
       >
         {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
@@ -44,6 +45,7 @@ export const Sidebar = () => {
         className={`fixed left-0 top-0 h-full w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 z-40 transition-transform duration-200 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         } lg:translate-x-0`}
+        style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
       >
         <div className="p-6 border-b border-gray-200 dark:border-gray-800">
           <h1 className="text-xl font-bold text-primary-600 dark:text-primary-400">
