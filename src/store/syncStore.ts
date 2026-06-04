@@ -20,7 +20,7 @@ interface SyncState {
 
 export const useSyncStore = create<SyncState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       user: null,
       syncEnabled: false,
       loading: true,

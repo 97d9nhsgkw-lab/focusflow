@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useSyncStore, startSync, syncToCloud } from '../store/syncStore'
 import { usePomodoroStore } from '../store/pomodoroStore'
 import { useTrackerStore } from '../store/trackerStore'
@@ -7,7 +7,6 @@ import { useAIStore } from '../store/aiStore'
 
 export function SyncProvider({ children }: { children: React.ReactNode }) {
   const { user, initSync } = useSyncStore()
-  const syncedRef = useRef(false)
 
   useEffect(() => {
     initSync()

@@ -38,7 +38,7 @@ export function listenToUserData<T>(uid: string, path: string, callback: (data: 
   })
 }
 
-export async function saveUserData<T>(uid: string, path: string, data: T) {
+export async function saveUserData(uid: string, path: string, data: Record<string, unknown>) {
   const ref = doc(db, 'users', uid, 'data', path)
   await setDoc(ref, data)
 }
