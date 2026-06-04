@@ -19,15 +19,6 @@ import { useAIStore } from '../../store/aiStore'
 import { useTrackerStore } from '../../store/trackerStore'
 import { useHabitStore } from '../../store/habitStore'
 
-const AI_MODELS = [
-  { provider: 'openai' as const, value: 'gpt-4o', label: 'GPT-4o' },
-  { provider: 'openai' as const, value: 'gpt-4o-mini', label: 'GPT-4o Mini' },
-  { provider: 'anthropic' as const, value: 'claude-sonnet-4-20250514', label: 'Claude Sonnet 4' },
-  { provider: 'anthropic' as const, value: 'claude-3-5-haiku-20241022', label: 'Claude 3.5 Haiku' },
-  { provider: 'anthropic' as const, value: 'claude-3-haiku-20240307', label: 'Claude 3 Haiku' },
-  { provider: 'anthropic' as const, value: 'claude-3-5-sonnet-20241022', label: 'Claude 3.5 Sonnet' },
-]
-
 type ConnectionStatus = 'idle' | 'testing' | 'connected' | 'error'
 
 export function Settings() {
@@ -208,9 +199,7 @@ export function Settings() {
                 const provider = (e.target.value || null) as 'openai' | 'anthropic' | null
                 updateAI({
                   provider,
-                  model: provider
-                    ? AI_MODELS.find((m) => m.provider === provider)?.value ?? ''
-                    : '',
+                  model: provider === 'anthropic' ? 'claude-3-haiku-20240307' : provider === 'openai' ? 'gpt-4o-mini' : '',
                 })
               }}
               className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
