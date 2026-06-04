@@ -9,10 +9,13 @@ import {
   ArrowRight,
   Share2,
   Smartphone,
+  LogIn,
 } from 'lucide-react'
+import { useAppStore } from '../store/appStore'
 
 interface WelcomeProps {
-  onGetStarted: () => void
+  isSignedIn: boolean
+  userName: string | null
 }
 
 const FEATURES = [
@@ -60,7 +63,9 @@ const FEATURES = [
   },
 ]
 
-export default function Welcome({ onGetStarted }: WelcomeProps) {
+export default function Welcome({ isSignedIn, userName }: WelcomeProps) {
+  const { setView } = useAppStore()
+
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col">
       {/* Hero Section */}
@@ -69,37 +74,62 @@ export default function Welcome({ onGetStarted }: WelcomeProps) {
           <Sparkles size={40} className="text-white" />
         </div>
 
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-          Welcome to{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-violet-600">
-            FocusFlow
-          </span>
-        </h1>
-
-        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md mb-8">
-          Your personal productivity companion. Manage time, build habits, and stay focused.
-        </p>
-
-        <button
-          onClick={onGetStarted}
-          className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-500 to-violet-600 text-white rounded-xl font-medium shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all hover:scale-105"
-        >
-          Get Started
-          <ArrowRight size={20} />
-        </button>
+        {isSignedIn ? (
+          <>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+              Welcome back,{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-violet-600">
+                {userName || 'there'}
+              </span>
+            </h1>
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md mb-8">
+              Ready to stay productive today?
+            </p>
+          </>
+        ) : (
+          <>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+              Welcome to{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-violet-600">
+                FocusFlow
+              </span>
+            </h1>
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-md mb-8">
+              Your personal productivity companion. Manage time, build habits, and stay focused.
+            </p>
+            <button
+              onClick={() => setView('settings')}
+              className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-500 to-violet-600 text-white rounded-xl font-medium shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all hover:scale-105"
+            >
+              <LogIn size={20} />
+              Get Started
+            </button>
+          </>
+        )}
       </div>
 
       {/* Features Grid */}
       <div className="px-4 pb-12">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white text-center mb-6">
-            Everything you need
+            {isSignedIn ? 'Your tools' : 'Everything you need'}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {FEATURES.map((feature) => (
-              <div
+              <button
                 key={feature.title}
-                className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors"
+                onClick={() => {
+                  const viewMap: Record<string, string> = {
+                    'Pomodoro Timer': 'pomodoro',
+                    'Focus Mode': 'focus',
+                    'Daily Planner': 'planner',
+                    'Habit Tracker': 'habits',
+                    'Time Tracker': 'tracker',
+                    'AI Assistant': 'ai',
+                  }
+                  setView(viewMap[feature.title] as 'pomodoro' | 'focus' | 'planner' | 'habits' | 'tracker' | 'ai')
+                }}
+                className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-all hover:scale-105 text-left"
               >
                 <div className={`w-10 h-10 rounded-lg ${feature.bg} flex items-center justify-center mb-3`}>
                   <feature.icon size={20} className={feature.color} />
@@ -110,7 +140,7 @@ export default function Welcome({ onGetStarted }: WelcomeProps) {
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {feature.description}
                 </p>
-              </div>
+              </button>
             ))}
           </div>
         </div>

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Layout } from './components/layout/Layout'
 import Dashboard from './components/Dashboard'
 import PomodoroTimer from './components/pomodoro/PomodoroTimer'
@@ -12,27 +11,17 @@ import UserGuide from './components/userguide/UserGuide'
 import AIHub from './components/ai/AIHub'
 import Welcome from './components/Welcome'
 import { useAppStore } from './store/appStore'
+import { useSyncStore } from './store/syncStore'
 import { SyncProvider } from './components/SyncProvider'
 
 function App() {
   const { currentView } = useAppStore()
-  const [showWelcome, setShowWelcome] = useState(() => {
-    return !localStorage.getItem('focusflow-welcomed')
-  })
-
-  const handleWelcomeDone = () => {
-    localStorage.setItem('focusflow-welcomed', 'true')
-    setShowWelcome(false)
-  }
+  const { user } = useSyncStore()
 
   const renderView = () => {
-    if (showWelcome) {
-      return <Welcome onGetStarted={handleWelcomeDone} />
-    }
-
     switch (currentView) {
       case 'dashboard':
-        return <Dashboard />
+        return <Welcome isSignedIn={!!user} userName={user?.displayName || user?.email} />
       case 'pomodoro':
         return <PomodoroTimer />
       case 'focus':
@@ -52,7 +41,7 @@ function App() {
       case 'ai':
         return <AIHub />
       default:
-        return <Dashboard />
+        return <Welcome isSignedIn={!!user} userName={user?.displayName || user?.email} />
     }
   }
 
