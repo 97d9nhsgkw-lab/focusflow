@@ -65,6 +65,6 @@ export function startSync(uid: string) {
   return () => unsubscribers.forEach((unsub) => unsub())
 }
 
-export async function syncToCloud(uid: string, path: string, data: unknown) {
+export async function syncToCloud(uid: string, path: string, data: Record<string, unknown>) {
   await saveUserData(uid, path, data)
 }
