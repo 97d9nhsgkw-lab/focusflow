@@ -1,33 +1,24 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Plus, Check, Clock, ArrowLeft, ArrowRight, GripVertical } from 'lucide-react'
-import type { TimeBlock, DailyPlan } from '../../types'
+import type { TimeBlock } from '../../types'
 import { CATEGORIES } from '../../types'
 import { generateId, formatDate, getTodayKey, getRelativeDay } from '../../utils'
+import { usePlannerStore } from '../../store/plannerStore'
 
 const HOURS = Array.from({ length: 18 }, (_, i) => i + 6)
 
-const STORAGE_KEY = 'daily-planner-plans'
 const YESTERDAY_ROLLOVER_KEY = 'daily-planner-rollover'
 
 export default function DailyPlanner() {
   const [currentDate, setCurrentDate] = useState(getTodayKey())
-  const [plans, setPlans] = useState<Record<string, DailyPlan>>({})
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [newTaskCategory, setNewTaskCategory] = useState<string>(CATEGORIES[0].name)
   const [newTaskHour, setNewTaskHour] = useState(9)
   const [draggedBlockId, setDraggedBlockId] = useState<string | null>(null)
   const [rolloverTasks, setRolloverTasks] = useState<TimeBlock[]>([])
 
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) {
-      setPlans(JSON.parse(saved))
-    }
-  }, [])
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(plans))
-  }, [plans])
+  const plans = usePlannerStore((s) => s.plans)
+  const updatePlan = usePlannerStore((s) => s.updatePlan)
 
   useEffect(() => {
     const yesterday = formatDate(new Date(Date.now() - 86400000))
@@ -57,15 +48,13 @@ export default function DailyPlanner() {
     }
   }, [plans, currentDate, rolloverTasks])
 
-  const getCurrentPlan = useCallback((): DailyPlan => {
+  const getCurrentPlan = useCallback(() => {
     return plans[currentDate] || { date: currentDate, blocks: [] }
   }, [plans, currentDate])
 
-  const updatePlan = (updater: (plan: DailyPlan) => DailyPlan) => {
-    setPlans((prev) => {
-      const plan = prev[currentDate] || { date: currentDate, blocks: [] }
-      return { ...prev, [currentDate]: updater(plan) }
-    })
+  const updateCurrentPlan = (updater: (plan: { date: string; blocks: TimeBlock[] }) => { date: string; blocks: TimeBlock[] }) => {
+    const plan = plans[currentDate] || { date: currentDate, blocks: [] }
+    updatePlan(currentDate, updater(plan))
   }
 
   const addTask = () => {
@@ -78,12 +67,12 @@ export default function DailyPlanner() {
       category: newTaskCategory,
       completed: false,
     }
-    updatePlan((plan) => ({ ...plan, blocks: [...plan.blocks, newBlock] }))
+    updateCurrentPlan((plan) => ({ ...plan, blocks: [...plan.blocks, newBlock] }))
     setNewTaskTitle('')
   }
 
   const toggleComplete = (blockId: string) => {
-    updatePlan((plan) => ({
+    updateCurrentPlan((plan) => ({
       ...plan,
       blocks: plan.blocks.map((b) =>
         b.id === blockId ? { ...b, completed: !b.completed } : b
@@ -92,7 +81,7 @@ export default function DailyPlanner() {
   }
 
   const deleteBlock = (blockId: string) => {
-    updatePlan((plan) => ({
+    updateCurrentPlan((plan) => ({
       ...plan,
       blocks: plan.blocks.filter((b) => b.id !== blockId),
     }))
@@ -108,7 +97,7 @@ export default function DailyPlanner() {
 
   const handleDrop = (targetHour: number) => {
     if (!draggedBlockId) return
-    updatePlan((plan) => ({
+    updateCurrentPlan((plan) => ({
       ...plan,
       blocks: plan.blocks.map((b) =>
         b.id === draggedBlockId
@@ -124,7 +113,7 @@ export default function DailyPlanner() {
   }
 
   const moveToEisenhower = (blockId: string, quadrant: string) => {
-    updatePlan((plan) => ({
+    updateCurrentPlan((plan) => ({
       ...plan,
       blocks: plan.blocks.map((b) => {
         if (b.id !== blockId) return b

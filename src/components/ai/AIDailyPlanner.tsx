@@ -6,6 +6,7 @@ import { useAIStore } from '../../store/aiStore'
 import { useAppStore } from '../../store/appStore'
 import { useHabitStore } from '../../store/habitStore'
 import { useTrackerStore } from '../../store/trackerStore'
+import { usePlannerStore } from '../../store/plannerStore'
 import { CATEGORIES } from '../../types'
 import { getTodayKey, formatTime, generateId } from '../../utils'
 
@@ -21,8 +22,6 @@ interface DailyPlanResponse {
   summary: string
 }
 
-const PLANNER_STORAGE_KEY = 'daily-planner-plans'
-
 export default function AIDailyPlanner() {
   const [loading, setLoading] = useState(false)
   const [schedule, setSchedule] = useState<ScheduleItem[] | null>(null)
@@ -34,6 +33,7 @@ export default function AIDailyPlanner() {
   const { setView } = useAppStore()
   const { habits, logs } = useHabitStore()
   const { entries } = useTrackerStore()
+  const { plans, updatePlan } = usePlannerStore()
 
   const today = getTodayKey()
   const todayEntries = entries.filter((e) => e.date === today)
@@ -103,8 +103,7 @@ export default function AIDailyPlanner() {
     if (!schedule) return
 
     const today = getTodayKey()
-    const existingPlans = JSON.parse(localStorage.getItem(PLANNER_STORAGE_KEY) || '{}')
-    const existingBlocks = existingPlans[today]?.blocks || []
+    const existingBlocks = plans[today]?.blocks || []
 
     const newBlocks = schedule.map((item: ScheduleItem) => ({
       id: generateId(),
@@ -115,12 +114,11 @@ export default function AIDailyPlanner() {
       completed: false,
     }))
 
-    existingPlans[today] = {
+    updatePlan(today, {
       date: today,
       blocks: [...existingBlocks, ...newBlocks],
-    }
+    })
 
-    localStorage.setItem(PLANNER_STORAGE_KEY, JSON.stringify(existingPlans))
     setSaved(true)
   }
 

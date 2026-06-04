@@ -4,6 +4,7 @@ import { usePomodoroStore } from '../store/pomodoroStore'
 import { useTrackerStore } from '../store/trackerStore'
 import { useHabitStore } from '../store/habitStore'
 import { useAIStore } from '../store/aiStore'
+import { usePlannerStore } from '../store/plannerStore'
 
 export function SyncProvider({ children }: { children: React.ReactNode }) {
   const { user, initSync } = useSyncStore()
@@ -36,6 +37,9 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
           break
         case 'ai':
           useAIStore.setState(data)
+          break
+        case 'planner':
+          usePlannerStore.setState(data)
           break
       }
       initialLoadDone.current = true
@@ -87,11 +91,19 @@ export function SyncProvider({ children }: { children: React.ReactNode }) {
       }
     })
 
+    const unsubPlanner = usePlannerStore.subscribe((state) => {
+      if (initialLoadDone.current) {
+        console.log('[Sync] Saving planner to cloud')
+        syncToCloud(user.uid, 'planner', { plans: state.plans }).catch(console.error)
+      }
+    })
+
     return () => {
       unsubPomodoro()
       unsubTracker()
       unsubHabits()
       unsubAI()
+      unsubPlanner()
     }
   }, [user])
 

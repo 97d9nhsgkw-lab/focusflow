@@ -52,7 +52,7 @@ export const useSyncStore = create<SyncState>()(
 )
 
 export function startSync(uid: string) {
-  const paths = ['pomodoro', 'tracker', 'habits', 'ai']
+  const paths = ['pomodoro', 'tracker', 'habits', 'ai', 'planner']
 
   const unsubscribers = paths.map((path) =>
     listenToUserData(uid, path, (data) => {
