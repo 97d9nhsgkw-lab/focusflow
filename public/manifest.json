@@ -1,0 +1,17 @@
+{
+  "name": "FocusFlow",
+  "short_name": "FocusFlow",
+  "description": "Personal time management app with Pomodoro, habits, and AI planning",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#030712",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
